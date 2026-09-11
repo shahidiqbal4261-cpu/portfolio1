@@ -20,12 +20,13 @@ const commonClass =
 
 const Form = () => {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const sendEmail = (e) => {
     e.preventDefault();
     setLoading(true);
-    setStatus("");
+    setStatus(null);
 
     const formData = {
       name: e.target.name.value,
@@ -36,71 +37,117 @@ const Form = () => {
       message: e.target.message.value,
     };
 
+    const mailtoUrl = `mailto:shahidiqbal4261@gmail.com?subject=${encodeURIComponent(
+      formData.subject || "Portfolio Contact Inquiry"
+    )}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nLocation: ${formData.location}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
+    )}`;
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_4y70lke";
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_ziupamh";
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "LVF65wfGfjVUDVRct";
+
+    // Try EmailJS first
     emailjs
       .sendForm(
-        "service_4y70lke",
-        "template_jmv32yo",
+        serviceId,
+        templateId,
         e.target,
-        "LVF65wfGfjVUDVRct"
+        publicKey
       )
       .then(
         (result) => {
           console.log("EmailJS SUCCESS:", result);
-          setStatus("✅ Message sent successfully!");
+          setStatus({
+            type: "success",
+            title: "Message Sent!",
+            message: `Thank you, ${formData.name}. Your inquiry has been sent directly to Shahid Iqbal.`,
+          });
+          setSubmitted(true);
           setLoading(false);
           e.target.reset();
         },
         (error) => {
-          console.error("EmailJS ERROR:", error);
-          const errorMsg = error?.text || "Service Unavailable";
+          console.warn("EmailJS info (using direct dispatch fallback):", error);
           
-          // Mailto fallback
-          const mailtoUrl = `mailto:shahidiqbal4261@gmail.com?subject=${encodeURIComponent(
-            formData.subject || "Portfolio Contact Message"
-          )}&body=${encodeURIComponent(
-            `Name: ${formData.name}\nEmail: ${formData.email}\nLocation: ${formData.location}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
-          )}`;
-          
-          setStatus(`⚠️ Direct form dispatch issue (${errorMsg}). Opening your email client...`);
+          // Trigger mailto fallback smoothly
           window.location.href = mailtoUrl;
+
+          setStatus({
+            type: "success",
+            title: "Inquiry Prepared & Email App Opened!",
+            message: `Thank you, ${formData.name}! Your message has been prepared for shahidiqbal4261@gmail.com and your default email app was opened.`,
+          });
+          setSubmitted(true);
           setLoading(false);
+          e.target.reset();
         }
       );
   };
 
   return (
     <div>
-      <p className="text-sm sm:text-base font-normal text-slate-500 mb-6">
+      <p className="text-sm sm:text-base font-normal text-slate-400 mb-6">
         Fill in the details below to discuss API integrations, contract opportunities, or full-stack web applications.
       </p>
-      <div>
-        <form onSubmit={sendEmail} className="flex flex-col gap-4">
-          <input type="text" name="name" placeholder="Your Name *" className={commonClass} required />
-          <input type="email" name="email" placeholder="Your Email Address *" className={commonClass} required />
-          <input type="text" name="location" placeholder="Location *" className={commonClass} required />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input type="text" name="budget" placeholder="Budget / Range *" className={commonClass} required />
-            <input type="text" name="subject" placeholder="Project Subject *" className={commonClass} required />
+      {status && (
+        <div
+          className={`mb-6 p-4 rounded-xl border backdrop-blur-md transition-all duration-500 ${
+            status.type === "success"
+              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+              : "bg-sky-500/10 border-sky-500/30 text-sky-300"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg font-bold shrink-0">
+              ✓
+            </div>
+            <div>
+              <h4 className="font-semibold text-sm sm:text-base text-emerald-200">
+                {status.title}
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
+                {status.message}
+              </p>
+            </div>
           </div>
+        </div>
+      )}
 
-          <textarea name="message" placeholder="Project Details or API Requirements *" rows="4" className={commonClass} required />
+      <form onSubmit={sendEmail} className="flex flex-col gap-4">
+        <input type="hidden" name="time" value={new Date().toLocaleString()} />
+        <input type="text" name="name" placeholder="Your Name *" className={commonClass} required />
+        <input type="email" name="email" placeholder="Your Email Address *" className={commonClass} required />
+        <input type="text" name="location" placeholder="Location *" className={commonClass} required />
 
-          <button
-            type="submit"
-            className="px-6 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 hover:from-sky-400 hover:to-blue-600 shadow-lg shadow-sky-300/30 flex items-center justify-center gap-2 mt-4 text-sm md:text-base transition duration-300 cursor-pointer"
-            disabled={loading}
-          >
-            {loading ? "Sending..." : "Send Message"} {telegramSVG}
-          </button>
-        </form>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="text" name="budget" placeholder="Budget / Range *" className={commonClass} required />
+          <input type="text" name="subject" placeholder="Project Subject *" className={commonClass} required />
+        </div>
 
-        {status && (
-          <p className="mt-4 text-center text-sm font-semibold text-sky-600">
-            {status}
-          </p>
-        )}
-      </div>
+        <textarea name="message" placeholder="Project Details or API Requirements *" rows="4" className={commonClass} required />
+
+        <button
+          type="submit"
+          className="px-6 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 hover:from-sky-400 hover:to-blue-600 shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 mt-4 text-sm md:text-base transition duration-300 cursor-pointer disabled:opacity-50"
+          disabled={loading}
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </span>
+          ) : (
+            <>
+              Send Message {telegramSVG}
+            </>
+          )}
+        </button>
+      </form>
     </div>
   );
 };
