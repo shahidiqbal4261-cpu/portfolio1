@@ -25,6 +25,16 @@ const Form = () => {
   const sendEmail = (e) => {
     e.preventDefault();
     setLoading(true);
+    setStatus("");
+
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      location: e.target.location.value,
+      budget: e.target.budget.value,
+      subject: e.target.subject.value,
+      message: e.target.message.value,
+    };
 
     emailjs
       .sendForm(
@@ -34,13 +44,25 @@ const Form = () => {
         "LVF65wfGfjVUDVRct"
       )
       .then(
-        () => {
+        (result) => {
+          console.log("EmailJS SUCCESS:", result);
           setStatus("✅ Message sent successfully!");
           setLoading(false);
           e.target.reset();
         },
-        () => {
-          setStatus("❌ Failed to send message. Try again.");
+        (error) => {
+          console.error("EmailJS ERROR:", error);
+          const errorMsg = error?.text || "Service Unavailable";
+          
+          // Mailto fallback
+          const mailtoUrl = `mailto:shahidiqbal4261@gmail.com?subject=${encodeURIComponent(
+            formData.subject || "Portfolio Contact Message"
+          )}&body=${encodeURIComponent(
+            `Name: ${formData.name}\nEmail: ${formData.email}\nLocation: ${formData.location}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
+          )}`;
+          
+          setStatus(`⚠️ Direct form dispatch issue (${errorMsg}). Opening your email client...`);
+          window.location.href = mailtoUrl;
           setLoading(false);
         }
       );
