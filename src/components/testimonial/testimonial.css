@@ -1,0 +1,44 @@
+/* Custom CSS to style Swiper Pagination Dots */
+
+/* 1. Positioning the Dots */
+#testimonialSwiper .swiper-pagination {
+    /* Use absolute positioning relative to the container for better control */
+    position: absolute; /* Changed from 'relative' for better structure */
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    /* Add padding to lift the dots slightly above the bottom */
+    padding-top: 30px; 
+    padding-bottom: 20px; 
+    
+    /* Center the dots */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 2. Styling all Dots (Bullets) */
+#testimonialSwiper .swiper-pagination-bullet {
+    /* Base color, size, and transition */
+    background: #bae6fd; /* sky-200, visible on light cards */
+    opacity: 1;
+    width: 10px;
+    height: 10px;
+    margin: 0 6px;
+    transition: all 0.3s ease;
+}
+
+/* 3. Styling the Active Dot */
+#testimonialSwiper .swiper-pagination-bullet-active {
+    background: #0ea5e9; /* sky-500, matches site accent */
+    opacity: 1;
+    width: 12px;
+    height: 12px;
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+}
+
+/* 4. Optional: Adding an animation/transition to the inactive dots on hover */
+#testimonialSwiper .swiper-pagination-bullet:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}

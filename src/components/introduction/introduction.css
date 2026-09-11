@@ -1,0 +1,81 @@
+/* --- Custom Highlight Background --- */
+.bg-highlight {
+  /* Note: This CSS is for the component's original text highlighting.
+     In the final JS code, we used Tailwind classes for badges (bg-highlight px-2 rounded-md).
+     If you switch back to just using <span className="bg-highlight">, this CSS will apply.
+  */
+  background: linear-gradient(to top, #a5b4fc 40%, transparent 40%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+/* --- Keyframes for Animation --- */
+
+/* Keyframe for a simple fade-in effect */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Keyframe for fading in and sliding down slightly */
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Keyframe for the image (fading in and sliding in from bottom-right) */
+@keyframes fadeInUpLg {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* --- Custom Animation Classes (To be used in Introduction.jsx) --- */
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s ease-out forwards;
+}
+
+.animate-fade-in-up-lg {
+  animation: fadeInUpLg 0.8s ease-out forwards;
+}
+
+/* To ensure all elements start hidden before animation */
+.opacity-0 {
+  opacity: 0;
+}
+
+/* --- Custom Delay Classes (To make elements load sequentially) --- */
+
+/* You can define more delays if needed */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+
+/* Set animation-fill-mode for all delayed elements */
+[class*="delay-"] {
+  animation-fill-mode: both;
+}
