@@ -5,12 +5,12 @@ import Loading from "../components/common/loading/Loading";
 const Home = lazy(() => import("../pages/Home"));
 const Main = lazy(() => import("../layouts/Main"));
 
-const repoName = import.meta.env.VITE_REPO_NAME ?? "";
+const repoName = import.meta.env.BASE_URL ?? "/";
 
 export const router = createBrowserRouter(
   [
     {
-      path: `/`,
+      path: "/",
       element: (
         <Suspense fallback={<Loading />}>
           <Main />
@@ -18,9 +18,9 @@ export const router = createBrowserRouter(
       ),
       children: [
         { path: "", element: <Home /> },
-        { path: "*", element: <div>404 - Page Not Found</div> },
+        { path: "*", element: <Home /> },
       ],
     },
   ],
-  { basename: repoName ? `/${repoName}` : "/" }
+  { basename: repoName }
 );
