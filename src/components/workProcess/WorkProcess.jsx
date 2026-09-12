@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import WorkSteps from "./WorkSteps";
 import Reveal from "../common/reveal/Reveal";
+import ProcessPath from "./ProcessPath";
 import { faProjectDiagram, faCode, faBug, faRocket } from "@fortawesome/free-solid-svg-icons";
 
 const workStepData = [
@@ -34,6 +36,9 @@ const workStepData = [
 ];
 
 const WorkProcess = () => {
+  const gridRef = useRef(null);
+  const stepRefs = useRef([]);
+
   return (
     <section
       id="work-process"
@@ -59,11 +64,14 @@ const WorkProcess = () => {
         </Reveal>
 
         {/* Right Work Steps Grid */}
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div ref={gridRef} className="relative grid sm:grid-cols-2 gap-6">
+          <ProcessPath containerRef={gridRef} itemRefs={stepRefs} count={workStepData.length} />
           {workStepData.map((data, index) => (
-            <Reveal key={index} delay={index * 100} direction="right">
-              <WorkSteps data={data} />
-            </Reveal>
+            <div key={index} ref={(el) => (stepRefs.current[index] = el)} className="relative z-[1]">
+              <Reveal delay={index * 100} direction="right">
+                <WorkSteps data={data} />
+              </Reveal>
+            </div>
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import Roles from "./Roles";
 import Reveal from "../common/reveal/Reveal";
+import Magnetic from "../common/magnetic/Magnetic";
 
 const rolesData = [
   {
@@ -57,12 +58,14 @@ const Profession = () => {
             </p>
           </div>
 
-          <a
-            href="#contact"
-            className="mt-10 px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 transition duration-300 shadow-lg shadow-sky-300/30 w-fit max-md:mx-auto"
-          >
-            Say Hello 👋
-          </a>
+          <Magnetic className="mt-10 w-fit max-md:mx-auto">
+            <a
+              href="#contact"
+              className="inline-block px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 transition duration-300 shadow-lg shadow-sky-300/30"
+            >
+              Say Hello 👋
+            </a>
+          </Magnetic>
         </Reveal>
 
         {/* Right Section */}

@@ -11,6 +11,11 @@ const Projects = ({ data, onOpen }) => {
       onClick={() => onOpen?.(data)}
       className="group flex flex-col rounded-2xl bg-white border border-slate-100 backdrop-blur-xl overflow-hidden shadow-md shadow-sky-100/50 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-200/60 transition-colors duration-500 cursor-pointer"
     >
+      {/* Shine sweep on hover */}
+      <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-2xl">
+        <div className="absolute inset-y-0 left-[-50%] w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent transition-[left] duration-700 ease-out group-hover:left-[150%]" />
+      </div>
+
       {/* Project Image / Custom Visual */}
       <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
         {data?.CustomVisual ? (

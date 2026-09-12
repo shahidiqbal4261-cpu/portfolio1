@@ -1,5 +1,7 @@
 import { useState } from "react";
 import emailjs from "emailjs-com";
+import Magnetic from "../common/magnetic/Magnetic";
+import SuccessCheck from "../common/successCheck/SuccessCheck";
 
 const telegramSVG = (
   <svg
@@ -93,21 +95,19 @@ const Form = () => {
 
       {status && (
         <div
-          className={`mb-6 p-4 rounded-xl border backdrop-blur-md transition-all duration-500 ${
+          className={`mb-6 p-4 rounded-xl border animate-[fadeInUp_0.35s_ease-out] ${
             status.type === "success"
-              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
-              : "bg-sky-500/10 border-sky-500/30 text-sky-300"
+              ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+              : "bg-sky-50 border-sky-200 text-sky-700"
           }`}
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg font-bold shrink-0">
-              ✓
-            </div>
+            <SuccessCheck className={status.type === "success" ? "text-emerald-500" : "text-sky-500"} />
             <div>
-              <h4 className="font-semibold text-sm sm:text-base text-emerald-200">
+              <h4 className="font-semibold text-sm sm:text-base text-slate-900">
                 {status.title}
               </h4>
-              <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
                 {status.message}
               </p>
             </div>
@@ -128,25 +128,27 @@ const Form = () => {
 
         <textarea name="message" placeholder="Project Details or API Requirements *" rows="4" className={commonClass} required />
 
-        <button
-          type="submit"
-          className="px-6 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 hover:from-sky-400 hover:to-blue-600 shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 mt-4 text-sm md:text-base transition duration-300 cursor-pointer disabled:opacity-50"
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="flex items-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Processing...
-            </span>
-          ) : (
-            <>
-              Send Message {telegramSVG}
-            </>
-          )}
-        </button>
+        <Magnetic strength={30} className="w-full mt-4">
+          <button
+            type="submit"
+            className="w-full px-6 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 hover:from-sky-400 hover:to-blue-600 shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 text-sm md:text-base transition duration-300 cursor-pointer disabled:opacity-50"
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </span>
+            ) : (
+              <>
+                Send Message {telegramSVG}
+              </>
+            )}
+          </button>
+        </Magnetic>
       </form>
     </div>
   );
