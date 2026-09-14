@@ -18,7 +18,7 @@ const Projects = ({ data, onOpen }) => {
         <div className="absolute inset-y-0 left-[-40%] w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-[left] duration-700 ease-out group-hover:left-[130%]" />
       </div>
 
-      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900">
+      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 flex items-center justify-center">
         {data?.CustomVisual ? (
           <data.CustomVisual />
         ) : data?.image ? (

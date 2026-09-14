@@ -52,7 +52,7 @@ const ProjectModal = ({ project, onClose }) => {
           <FontAwesomeIcon icon={faXmark} />
         </button>
 
-        <div className="relative aspect-[16/9] overflow-hidden bg-sky-50">
+        <div className="relative aspect-[16/9] overflow-hidden bg-slate-900 flex items-center justify-center">
           {project.CustomVisual ? (
             <project.CustomVisual />
           ) : project.image ? (
@@ -62,7 +62,7 @@ const ProjectModal = ({ project, onClose }) => {
                 alt={`${project.title} preview`}
                 className="w-full h-full object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none" />
             </>
           ) : (
             <ProjectVisual visual={project.visual} />
