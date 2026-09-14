@@ -20,9 +20,9 @@ const ScrollProgress = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-full h-[3px] z-[60] pointer-events-none">
+    <div className="fixed top-0 left-0 w-full h-[3.5px] z-[60] pointer-events-none">
       <div
-        className="h-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-600 transition-[width] duration-150 ease-out"
+        className="h-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-600 transition-[width] duration-150 ease-out shadow-[0_0_8px_rgba(14,165,233,0.45)]"
         style={{ width: `${progress}%` }}
       />
     </div>

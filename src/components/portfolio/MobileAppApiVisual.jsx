@@ -3,10 +3,9 @@ import { faMobileScreen, faServer, faCheckCircle, faBolt, faLock } from "@fortaw
 
 const MobileAppApiVisual = () => {
   return (
-    <div className="relative w-full h-full bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 p-4 sm:p-5 flex items-center justify-between overflow-hidden group-hover:scale-105 transition-transform duration-700 select-none">
-      {/* Ambient Radial Lighting */}
+    <div className="relative w-full h-full bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 p-4 sm:p-5 flex items-center justify-between overflow-hidden group-hover:scale-105 transition-transform duration-700 select-none">
       <div className="absolute -top-10 -left-10 w-40 h-40 bg-sky-500/20 rounded-full blur-2xl"></div>
-      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl"></div>
+      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/15 rounded-full blur-2xl"></div>
 
       {/* Left: Mobile App Mockup Frame */}
       <div className="relative z-10 w-[46%] h-full bg-slate-900 border border-slate-700/80 rounded-xl p-2 flex flex-col justify-between shadow-xl shadow-slate-950/60 transform -rotate-1 group-hover:rotate-0 transition-transform duration-500">
@@ -27,11 +26,11 @@ const MobileAppApiVisual = () => {
             <p className="text-[8px] font-semibold text-sky-400 uppercase">Search Hotels &amp; Flights</p>
             <div className="flex items-center justify-between text-[9px] text-slate-200 mt-0.5">
               <span>Lahore → Dubai</span>
-              <span className="text-emerald-400 font-mono">⚡ 45ms</span>
+              <span className="text-sky-400 font-mono">45ms</span>
             </div>
           </div>
 
-          <div className="bg-indigo-950/80 rounded-lg p-1.5 border border-indigo-700/50">
+          <div className="bg-slate-800/80 rounded-lg p-1.5 border border-slate-700/50">
             <div className="flex items-center justify-between text-[8px]">
               <span className="text-slate-300 font-medium">Token Auth Session</span>
               <span className="text-sky-300 font-mono">Active</span>
@@ -67,22 +66,21 @@ const MobileAppApiVisual = () => {
         {/* Live Endpoint Log */}
         <div className="space-y-1 font-mono text-[8px] leading-tight text-slate-300">
           <div className="flex items-center justify-between bg-slate-900/90 p-1 rounded border border-slate-800">
-            <span className="text-emerald-400 font-bold">POST /api/v1/app/login</span>
-            <span className="text-emerald-400 font-semibold">200 OK</span>
+            <span className="text-sky-400 font-bold">POST /api/v1/app/login</span>
+            <span className="text-sky-300 font-semibold">200 OK</span>
           </div>
           <div className="flex items-center justify-between bg-slate-900/90 p-1 rounded border border-slate-800">
             <span className="text-sky-400 font-bold">GET /api/v1/hotels/search</span>
             <span className="text-sky-400 font-semibold">38ms</span>
           </div>
           <div className="flex items-center justify-between bg-slate-900/90 p-1 rounded border border-slate-800">
-            <span className="text-purple-400 font-bold">POST /api/v1/booking/create</span>
-            <span className="text-emerald-400 font-semibold">201 Created</span>
+            <span className="text-sky-400 font-bold">POST /api/v1/booking/create</span>
+            <span className="text-sky-300 font-semibold">201 Created</span>
           </div>
         </div>
 
-        {/* API Response Status */}
         <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[8px] text-slate-400">
-          <span className="text-emerald-400 font-semibold flex items-center gap-1">
+          <span className="text-sky-400 font-semibold flex items-center gap-1">
             <FontAwesomeIcon icon={faCheckCircle} className="text-[9px]" /> Mobile Network Sync
           </span>
           <span className="text-sky-400 font-bold">100% Uptime</span>

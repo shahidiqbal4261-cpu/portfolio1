@@ -7,6 +7,7 @@ const ApiNetworkBackground = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ctx = canvas.getContext("2d");
     let animationFrameId;
     let width = (canvas.width = canvas.offsetWidth);
@@ -20,10 +21,10 @@ const ApiNetworkBackground = () => {
 
     window.addEventListener("resize", handleResize);
 
-    // Mouse tracking for interactive node magnetic pull
     const mouse = { x: -1000, y: -1000, radius: 140 };
 
     const handleMouseMove = (e) => {
+      if (reduceMotion) return;
       const rect = canvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
@@ -37,53 +38,51 @@ const ApiNetworkBackground = () => {
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
-    // Generate floating API nodes
-    const nodeCount = Math.min(Math.floor((width * height) / 14000), 45);
+    const nodeCount = Math.min(Math.floor((width * height) / 16000), 36);
     const nodes = [];
 
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx: reduceMotion ? 0 : (Math.random() - 0.5) * 0.35,
+        vy: reduceMotion ? 0 : (Math.random() - 0.5) * 0.35,
         radius: Math.random() * 2 + 1.5,
         pulse: Math.random() * Math.PI,
       });
     }
 
-    const draw = () => {
+    const drawFrame = (animate) => {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw connecting line network
       for (let i = 0; i < nodes.length; i++) {
         const nodeA = nodes[i];
-        nodeA.x += nodeA.vx;
-        nodeA.y += nodeA.vy;
 
-        // Bounce on boundaries
-        if (nodeA.x < 0 || nodeA.x > width) nodeA.vx *= -1;
-        if (nodeA.y < 0 || nodeA.y > height) nodeA.vy *= -1;
+        if (animate) {
+          nodeA.x += nodeA.vx;
+          nodeA.y += nodeA.vy;
+          if (nodeA.x < 0 || nodeA.x > width) nodeA.vx *= -1;
+          if (nodeA.y < 0 || nodeA.y > height) nodeA.vy *= -1;
+          nodeA.pulse += 0.025;
+        }
 
-        // Pulse size gently
-        nodeA.pulse += 0.03;
-        const currentRadius = nodeA.radius + Math.sin(nodeA.pulse) * 0.5;
+        const currentRadius = animate
+          ? nodeA.radius + Math.sin(nodeA.pulse) * 0.4
+          : nodeA.radius;
 
-        // Draw node
         ctx.beginPath();
         ctx.arc(nodeA.x, nodeA.y, currentRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(14, 165, 233, 0.4)";
+        ctx.fillStyle = "rgba(14, 165, 233, 0.35)";
         ctx.fill();
 
-        // Connect nearby nodes
         for (let j = i + 1; j < nodes.length; j++) {
           const nodeB = nodes[j];
           const dx = nodeB.x - nodeA.x;
           const dy = nodeB.y - nodeA.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 130) {
-            const alpha = (1 - dist / 130) * 0.25;
+          if (dist < 120) {
+            const alpha = (1 - dist / 120) * 0.2;
             ctx.beginPath();
             ctx.moveTo(nodeA.x, nodeA.y);
             ctx.lineTo(nodeB.x, nodeB.y);
@@ -93,26 +92,33 @@ const ApiNetworkBackground = () => {
           }
         }
 
-        // Mouse interaction glow & magnetic pull
-        const mouseDx = mouse.x - nodeA.x;
-        const mouseDy = mouse.y - nodeA.y;
-        const mouseDist = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+        if (!reduceMotion) {
+          const mouseDx = mouse.x - nodeA.x;
+          const mouseDy = mouse.y - nodeA.y;
+          const mouseDist = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
 
-        if (mouseDist < mouse.radius) {
-          const force = (mouse.radius - mouseDist) / mouse.radius;
-          ctx.beginPath();
-          ctx.moveTo(nodeA.x, nodeA.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(14, 165, 233, ${force * 0.45})`;
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
+          if (mouseDist < mouse.radius) {
+            const force = (mouse.radius - mouseDist) / mouse.radius;
+            ctx.beginPath();
+            ctx.moveTo(nodeA.x, nodeA.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(14, 165, 233, ${force * 0.35})`;
+            ctx.lineWidth = 1.25;
+            ctx.stroke();
+          }
         }
       }
-
-      animationFrameId = requestAnimationFrame(draw);
     };
 
-    draw();
+    if (reduceMotion) {
+      drawFrame(false);
+    } else {
+      const loop = () => {
+        drawFrame(true);
+        animationFrameId = requestAnimationFrame(loop);
+      };
+      loop();
+    }
 
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -125,7 +131,8 @@ const ApiNetworkBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none opacity-60 z-0"
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-50 z-0"
+      aria-hidden="true"
     />
   );
 };

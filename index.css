@@ -6,7 +6,8 @@
 }
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Work Sans", sans-serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --breakpoint-xxs: 21.25rem; /* 340px */
   --breakpoint-xs: 23.125rem;  /* 363px */
   --breakpoint-xxl: 82.5rem;   /* 1320px */
@@ -16,7 +17,7 @@
 }
 
 body {
-  font-family: "Plus Jakarta Sans", "Work Sans", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   background-color: #f6fafd;
   color: #1e293b;
   overflow-x: hidden;
@@ -36,114 +37,108 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.35);
 }
 
 .section-title {
-  @apply md:font-semibold text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight;
+  @apply text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight;
 }
 
-/* Light glass cards: soft white surfaces with a sky-blue-tinted shadow */
+.section-eyebrow {
+  @apply text-sm font-bold uppercase tracking-widest text-sky-600 mb-2;
+}
+
+/* Soft surfaces — prefer for interactive cards only */
 .glass-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(148, 197, 232, 0.25);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 1);
 }
 
 .glass-card-glow {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(148, 197, 232, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 1);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .glass-card-glow:hover {
-  border-color: rgba(14, 165, 233, 0.4);
-  box-shadow: 0 15px 35px -10px rgba(14, 165, 233, 0.25);
-  transform: translateY(-4px);
+  border-color: rgba(125, 211, 252, 0.8);
+  box-shadow: 0 12px 28px -12px rgba(14, 165, 233, 0.2);
 }
 
 .text-gradient {
   background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0369a1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .text-gradient-cyan {
   background: linear-gradient(135deg, #0891b2 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .bg-radial-hero {
   background:
-    radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.14) 0%, transparent 40%),
-    radial-gradient(circle at 85% 50%, rgba(14, 165, 233, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 50% 90%, rgba(125, 211, 252, 0.10) 0%, transparent 50%);
+    radial-gradient(circle at 12% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 42%),
+    radial-gradient(circle at 88% 55%, rgba(14, 165, 233, 0.1) 0%, transparent 40%);
 }
 
 .bg-radial-section {
   background:
-    radial-gradient(circle at 90% 10%, rgba(14, 165, 233, 0.07) 0%, transparent 35%),
-    radial-gradient(circle at 10% 80%, rgba(56, 189, 248, 0.09) 0%, transparent 40%);
+    radial-gradient(circle at 90% 10%, rgba(14, 165, 233, 0.05) 0%, transparent 35%),
+    radial-gradient(circle at 10% 80%, rgba(56, 189, 248, 0.06) 0%, transparent 40%);
 }
 
-/* --- 3D floating orbs (hero / CTA backdrops) --- */
+/* Soft ambient blobs (static by default; animated only when motion OK) */
 .orb-3d {
   position: absolute;
   border-radius: 9999px;
   filter: blur(50px);
   pointer-events: none;
-  will-change: transform;
-  transform-style: preserve-3d;
 }
 
 @keyframes orbFloatA {
-  0%   { transform: translate3d(0, 0, 0) rotate3d(1, 1, 0, 0deg) scale(1); }
-  50%  { transform: translate3d(30px, -40px, 60px) rotate3d(1, 1, 0, 25deg) scale(1.08); }
-  100% { transform: translate3d(0, 0, 0) rotate3d(1, 1, 0, 0deg) scale(1); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(20px, -24px, 0) scale(1.05); }
 }
 
 @keyframes orbFloatB {
-  0%   { transform: translate3d(0, 0, 0) rotate3d(0, 1, 1, 0deg) scale(1); }
-  50%  { transform: translate3d(-35px, 30px, 40px) rotate3d(0, 1, 1, -20deg) scale(0.94); }
-  100% { transform: translate3d(0, 0, 0) rotate3d(0, 1, 1, 0deg) scale(1); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-22px, 18px, 0) scale(0.96); }
 }
 
-.orb-3d-a { animation: orbFloatA 14s ease-in-out infinite; }
-.orb-3d-b { animation: orbFloatB 18s ease-in-out infinite; }
+.orb-3d-a { animation: orbFloatA 16s ease-in-out infinite; }
+.orb-3d-b { animation: orbFloatB 20s ease-in-out infinite; }
 
-/* --- Gentle perspective float for 3D-tilted cards/images --- */
 @keyframes floatY {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
 }
 
 .animate-float {
-  animation: floatY 5s ease-in-out infinite;
+  animation: floatY 6s ease-in-out infinite;
 }
 
-/* --- Wave divider drift (slow horizontal sway on the back layer) --- */
 @keyframes waveDrift {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-3%); }
+  50% { transform: translateX(-2%); }
 }
 
 .animate-wave-drift {
-  animation: waveDrift 12s ease-in-out infinite;
+  animation: waveDrift 14s ease-in-out infinite;
 }
 
 @keyframes waveDriftSlow {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(2.5%); }
+  50% { transform: translateX(2%); }
 }
 
 .animate-wave-drift-slow {
-  animation: waveDriftSlow 18s ease-in-out infinite;
+  animation: waveDriftSlow 20s ease-in-out infinite;
 }
 
-/* --- Modal entrance --- */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -154,7 +149,6 @@ body {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* --- Success checkmark draw-in --- */
 @keyframes drawCircle {
   to { stroke-dashoffset: 0; }
 }
@@ -163,33 +157,13 @@ body {
   to { stroke-dashoffset: 0; }
 }
 
-/* --- Gentle ambient bob for small decorative shapes --- */
 @keyframes bob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-14px) rotate(6deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .animate-bob {
-  animation: bob 6s ease-in-out infinite;
-}
-
-/* --- Pointing hand nudge (draws the eye toward nearby text) --- */
-@keyframes pointX {
-  0%, 100% { transform: translateY(-50%) translateX(0); }
-  50% { transform: translateY(-50%) translateX(-10px); }
-}
-
-.animate-point-x {
-  animation: pointX 1.6s ease-in-out infinite;
-}
-
-@keyframes pointY {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(10px); }
-}
-
-.animate-point-y {
-  animation: pointY 1.6s ease-in-out infinite;
+  animation: bob 7s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -198,9 +172,7 @@ body {
   .animate-float,
   .animate-wave-drift,
   .animate-wave-drift-slow,
-  .animate-bob,
-  .animate-point-x,
-  .animate-point-y {
+  .animate-bob {
     animation: none;
   }
 }

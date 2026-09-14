@@ -3,7 +3,6 @@ import { useState } from "react";
 import { faCopy, faCheck, faPhone, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 const Address = ({ item }) => {
-  const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = (e, text) => {
@@ -26,11 +25,11 @@ const Address = ({ item }) => {
           </a>
           <button
             onClick={(e) => handleCopy(e, item?.description)}
-            className="px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-500 text-sky-700 hover:text-white border border-sky-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+            className="px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-500 text-sky-700 hover:text-white border border-sky-200 text-xs font-semibold transition flex items-center gap-1 cursor-pointer"
             title="Copy Email Address"
           >
-            <FontAwesomeIcon icon={copied ? faCheck : faCopy} className={copied ? "text-emerald-400" : ""} />
-            {copied ? "Copied!" : "Copy"}
+            <FontAwesomeIcon icon={copied ? faCheck : faCopy} />
+            {copied ? "Copied" : "Copy"}
           </button>
         </div>
       );
@@ -46,11 +45,11 @@ const Address = ({ item }) => {
           </a>
           <a
             href={`tel:${item?.description}`}
-            className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-500 text-emerald-700 hover:text-white border border-emerald-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+            className="px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-500 text-sky-700 hover:text-white border border-sky-200 text-xs font-semibold transition flex items-center gap-1 cursor-pointer"
             title="Call Now"
           >
             <FontAwesomeIcon icon={faPhone} />
-            Call Now
+            Call
           </a>
         </div>
       );
@@ -69,24 +68,13 @@ const Address = ({ item }) => {
   };
 
   return (
-    <div
-      className="p-4 sm:p-5 flex items-center rounded-2xl bg-white border border-slate-100 shadow-sm shadow-sky-100/50 transform transition-all duration-300 hover:scale-[1.02] hover:border-sky-300 hover:shadow-md hover:shadow-sky-200/60 max-sm:mx-auto group"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      <div
-        className={`h-12 w-12 flex items-center justify-center shrink-0 transition-colors duration-300 ${
-          hover ? "bg-sky-500 text-white shadow-md shadow-sky-300/40" : "bg-sky-50 text-sky-600 border border-sky-100"
-        } rounded-xl`}
-      >
-        <FontAwesomeIcon
-          icon={item?.icon}
-          className="text-lg md:text-xl"
-        />
+    <div className="p-4 sm:p-5 flex items-center rounded-xl bg-white border border-slate-100 transition-colors duration-200 hover:border-sky-300 max-sm:mx-auto">
+      <div className="h-11 w-11 flex items-center justify-center shrink-0 bg-sky-50 text-sky-600 border border-sky-100 rounded-xl">
+        <FontAwesomeIcon icon={item?.icon} className="text-lg" />
       </div>
-      <div className="ms-4 flex-1">
+      <div className="ms-4 flex-1 min-w-0">
         <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">
-          {item?.title}:
+          {item?.title}
         </p>
         <div className="text-base text-slate-900 font-semibold">
           {renderDescription()}

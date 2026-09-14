@@ -9,6 +9,11 @@ import MobileAppApiVisual from "./MobileAppApiVisual";
 import PaymentGatewayVisual from "./PaymentGatewayVisual";
 import RailBookingVisual from "./RailBookingVisual";
 
+/**
+ * Add proof links when available:
+ *   link: "https://..."     // live site / demo
+ *   github: "https://..."   // public or “ask for access” repo
+ */
 const projectData = [
   {
     id: 1,
@@ -23,7 +28,23 @@ const projectData = [
       "Handled cross-supplier checkout — a single booking can create orders against multiple supplier APIs (e.g. a hotel via Hotelbeds and a car via Mozio) and track each independently.",
       "Implemented webhook handling so booking status changes from any connected supplier update the unified booking record in real time.",
     ],
-    link: "#!",
+    link: "https://skyvela.com",
+    github: null,
+    caseStudy: {
+      problem:
+        "Travel search needed one UI over hotels, flights, and cars, but each supplier returned different JSON shapes, auth models, and booking lifecycles.",
+      role:
+        "Owned the backend integration layer — supplier auth, response normalization, cross-supplier checkout, and webhook status sync.",
+      approach:
+        "Mapped each supplier into a shared internal model, dispatched parallel supplier calls, and reconciled booking status via webhooks into one record.",
+      result:
+        "A unified search and checkout flow where mixed-supplier bookings stay trackable without exposing supplier quirks to the frontend.",
+      outcomes: [
+        "Single internal data model across Hotelbeds, Duffel, and Mozio",
+        "Independent order tracking per supplier within one checkout",
+        "Live booking status updates via supplier webhooks",
+      ],
+    },
   },
   {
     id: 2,
@@ -38,7 +59,23 @@ const projectData = [
       "Reconciled overlapping hotel content between Hotelbeds and Travelpayouts to avoid duplicate listings.",
       "Set up API-key/token authentication per supplier and validated that returned JSON was parsed, sanitized, and stored correctly before reaching the booking flow.",
     ],
-    link: "#!",
+    link: "https://www.travelgatekw.com/",
+    github: null,
+    caseStudy: {
+      problem:
+        "PHPTravels needed multiple hotel and transport suppliers online without duplicate inventory or broken booking states.",
+      role:
+        "Implemented supplier connectors, field mapping, auth, and webhook listeners inside the existing platform.",
+      approach:
+        "Added per-supplier auth, normalized hotel content, and validated JSON before it entered the booking pipeline.",
+      result:
+        "Multi-supplier search and booking with cleaner inventory and reliable status updates.",
+      outcomes: [
+        "Token-based Travelpayouts + Hotelbeds connectors",
+        "Duplicate hotel content reconciliation",
+        "Webhook-driven booking status updates",
+      ],
+    },
   },
   {
     id: 3,
@@ -53,7 +90,23 @@ const projectData = [
       "Kept the flow separate from the general hotel/flight system to handle package-specific data like itinerary and group size.",
       "Built admin-facing tools for managing package availability and reviewing/updating customer bookings.",
     ],
-    link: "#!",
+    link: null,
+    github: null,
+    caseStudy: {
+      problem:
+        "Umrah packages needed itinerary, group, and pilgrim data that did not fit a generic hotel/flight booking flow.",
+      role:
+        "Designed schema, booking flow, and admin tools for package lifecycle management.",
+      approach:
+        "Separated package booking from general travel APIs and modeled pilgrim + package tiers explicitly.",
+      result:
+        "A dedicated Umrah engine with admin control over packages and bookings.",
+      outcomes: [
+        "Package-specific schema and booking states",
+        "Admin tools for availability and booking review",
+        "Clean separation from multi-supplier hotel/flight flows",
+      ],
+    },
   },
   {
     id: 4,
@@ -68,7 +121,23 @@ const projectData = [
       "Optimized request/response payloads to keep the app fast and reliable on mobile networks.",
       "Worked closely with the mobile team to keep request/response contracts consistent with the website's booking flow.",
     ],
-    link: "#!",
+    link: null,
+    github: null,
+    caseStudy: {
+      problem:
+        "The mobile app needed the same booking capabilities as the web platform with lighter payloads and stable session auth.",
+      role:
+        "Built REST endpoints, session auth, and payload contracts for the mobile client.",
+      approach:
+        "Aligned mobile request/response shapes with the website booking flow while trimming payloads for mobile networks.",
+      result:
+        "A reliable mobile backend that stays in sync with web booking behavior.",
+      outcomes: [
+        "Session-based login and authenticated API access",
+        "Optimized JSON payloads for mobile",
+        "Consistent contracts with the web booking flow",
+      ],
+    },
   },
   {
     id: 5,
@@ -83,7 +152,23 @@ const projectData = [
       "Confirmed payment status before finalizing bookings, keeping payment and booking records in sync.",
       "Added error handling for malformed responses and timeout edge cases to keep payments reliable.",
     ],
-    link: "#!",
+    link: null,
+    github: null,
+    caseStudy: {
+      problem:
+        "Bookings must not finalize until card/wallet payment is confirmed, including webhook edge cases and timeouts.",
+      role:
+        "Integrated Xmoney charge flow, auth, and payment-to-booking status confirmation.",
+      approach:
+        "Authenticated API calls, validated responses, and only issued booking confirmation after verified payment status.",
+      result:
+        "Payments and bookings stay aligned with safer failure handling.",
+      outcomes: [
+        "Card and wallet charge support",
+        "Booking finalized only after confirmed payment",
+        "Timeout and malformed-response handling",
+      ],
+    },
   },
   {
     id: 6,
@@ -98,16 +183,31 @@ const projectData = [
       "Enabled users to search and book train tickets across two separate rail networks through one consistent flow.",
       "Kept fare and availability data in sync with the same error handling patterns used across other supplier integrations.",
     ],
-    link: "#!",
+    link: null,
+    github: null,
+    caseStudy: {
+      problem:
+        "Two rail networks needed search, availability, and ticketing inside the same booking product as hotels and flights.",
+      role:
+        "Mapped rail supplier data into the existing booking system and aligned error handling with other integrations.",
+      approach:
+        "Normalized schedule/fare models and reused platform booking patterns for both Jakarta and China rail APIs.",
+      result:
+        "One consistent rail booking experience across two supplier networks.",
+      outcomes: [
+        "Real-time schedule and seat lookup",
+        "Unified booking flow for both rail networks",
+        "Shared error-handling patterns with other suppliers",
+      ],
+    },
   },
 ];
 
 const categories = [
-  { id: "all", name: "All Projects" },
-  { id: "api", name: "Multi-Supplier APIs" },
-  { id: "backend", name: "PHP & Laravel" },
-  { id: "payments", name: "Payment Gateways" },
-  { id: "rail", name: "Rail Systems" },
+  { id: "all", name: "All" },
+  { id: "api", name: "Travel APIs" },
+  { id: "payments", name: "Payments" },
+  { id: "mobile", name: "Mobile" },
 ];
 
 const Portfolio = () => {
@@ -116,40 +216,41 @@ const Portfolio = () => {
 
   const filteredProjects = projectData.filter((project) => {
     if (activeCategory === "all") return true;
-    if (activeCategory === "api") return project.category.includes("APIs") || project.category.includes("REST");
-    if (activeCategory === "backend") return project.category.includes("PHP") || project.tags.includes("Laravel");
-    if (activeCategory === "payments") return project.category.includes("PAYMENTS") || project.tags.includes("Xmoney");
-    if (activeCategory === "rail") return project.category.includes("RAIL") || project.tags.includes("Rail APIs");
+    if (activeCategory === "api") {
+      return (
+        (project.category.includes("APIs") ||
+          project.category.includes("RAIL") ||
+          project.category.includes("FULL-STACK")) &&
+        !project.category.includes("MOBILE") &&
+        !project.category.includes("PAYMENTS")
+      );
+    }
+    if (activeCategory === "payments") return project.category.includes("PAYMENTS");
+    if (activeCategory === "mobile") return project.category.includes("MOBILE");
     return true;
   });
 
   return (
-    <div
-      className="content py-16 md:py-24 bg-sky-50 text-slate-700"
-      id="portfolio"
-    >
+    <div className="content py-16 md:py-24 text-slate-700">
       <Reveal className="mb-8 text-center max-w-2xl mx-auto px-4">
-        <p className="text-sm font-bold uppercase tracking-widest text-sky-600 mb-2">
-          Portfolio &amp; Work
-        </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+        <p className="section-eyebrow">Portfolio</p>
+        <h2 className="section-title text-slate-900">
           Featured Integrations &amp; <span className="text-gradient">Projects</span>
         </h2>
         <p className="font-normal text-base md:text-lg pt-4 text-slate-500 leading-relaxed">
-          A showcase of production travel API integrations, multi-supplier backend engines, payment gateways, and mobile APIs I've engineered.
+          Production travel API integrations, multi-supplier backends, payments, and mobile APIs. Open a project for the case study.
         </p>
       </Reveal>
 
-      {/* Category Filter Tabs */}
       <div className="flex flex-wrap justify-center gap-2 mb-10 px-4">
         {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer ${
+            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors duration-200 cursor-pointer ${
               activeCategory === cat.id
-                ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md shadow-sky-300/40 scale-105"
-                : "bg-white text-slate-600 hover:text-sky-600 border border-slate-200 hover:border-sky-300 shadow-sm"
+                ? "bg-sky-500 text-white shadow-sm shadow-sky-300/30"
+                : "bg-white text-slate-600 hover:text-sky-600 border border-slate-200 hover:border-sky-300"
             }`}
           >
             {cat.name}

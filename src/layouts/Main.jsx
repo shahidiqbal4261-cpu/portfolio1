@@ -4,13 +4,11 @@ import NavBar from "../components/common/navbar/NavBar";
 import Footer from "../components/common/footer/Footer";
 import ScrollToTop from "../components/common/scrollToTop/ScrollToTop";
 import ScrollProgress from "../components/common/scrollProgress/ScrollProgress";
-import CustomCursor from "../components/common/cursor/CustomCursor";
 import Loading from "../components/common/loading/Loading";
 
 const Main = () => {
   return (
     <div data-theme={"light"} className="relative">
-      <CustomCursor />
       <ScrollProgress />
       <header role="banner">
         <NavBar />

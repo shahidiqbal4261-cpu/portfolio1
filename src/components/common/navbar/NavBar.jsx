@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import logo from "../../../assets/logo.jpg";
 import { Link } from "react-scroll";
 import Magnetic from "../magnetic/Magnetic";
@@ -6,32 +6,72 @@ import Magnetic from "../magnetic/Magnetic";
 const navItems = [
   { id: 1, name: "Home", url: "introduction" },
   { id: 2, name: "About", url: "profile" },
-  { id: 3, name: "Process", url: "work-process" },
-  { id: 4, name: "Portfolio", url: "portfolio" },
-  { id: 5, name: "Services", url: "profession" },
+  { id: 3, name: "Portfolio", url: "portfolio" },
+  { id: 4, name: "Expertise", url: "profession" },
+  { id: 5, name: "Notes", url: "notes" },
 ];
 
 const NavBar = () => {
   const [position, setPosition] = useState(0);
+  const [activeUrl, setActiveUrl] = useState("introduction");
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 });
+  const listRef = useRef(null);
+  const linkRefs = useRef({});
 
   useEffect(() => {
     const handleScroll = () => setPosition(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const updateIndicator = useCallback((url) => {
+    const linkEl = linkRefs.current[url];
+    const listEl = listRef.current;
+    if (!linkEl || !listEl) return;
+
+    const listRect = listEl.getBoundingClientRect();
+    const linkRect = linkEl.getBoundingClientRect();
+
+    setIndicator({
+      left: linkRect.left - listRect.left,
+      width: linkRect.width,
+      opacity: 1,
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    updateIndicator(activeUrl);
+  }, [activeUrl, updateIndicator]);
+
+  useEffect(() => {
+    const onResize = () => updateIndicator(activeUrl);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [activeUrl, updateIndicator]);
+
   const menu = navItems.map((item) => (
-    <li key={item.id} onMouseDown={(e) => e.preventDefault()}>
+    <li key={item.id} className="relative" onMouseDown={(e) => e.preventDefault()}>
       <Link
         to={item.url}
         smooth={true}
         duration={800}
         spy={true}
         offset={-120}
-        activeClass="text-sky-600 font-semibold bg-sky-50 rounded-lg border border-sky-100 shadow-sm"
-        className="px-4 py-2 mx-1 cursor-pointer transition-all duration-300 rounded-md text-slate-600 hover:text-sky-600 hover:bg-sky-50"
+        onSetActive={() => setActiveUrl(item.url)}
+        className={`relative z-10 block px-4 py-2 mx-0.5 cursor-pointer transition-colors duration-300 rounded-md ${
+          activeUrl === item.url
+            ? "text-sky-600 font-semibold"
+            : "text-slate-600 hover:text-sky-600"
+        }`}
       >
-        {item.name}
+        <span
+          ref={(el) => {
+            linkRefs.current[item.url] = el;
+          }}
+          className="inline-block"
+        >
+          {item.name}
+        </span>
       </Link>
     </li>
   ));
@@ -45,7 +85,6 @@ const NavBar = () => {
       } z-50 transition-all duration-500`}
     >
       <div className="navbar flex justify-between items-center mx-auto content px-4 lg:px-10 py-3">
-        {/* Logo & Brand */}
         <Link
           to="introduction"
           smooth={true}
@@ -53,7 +92,7 @@ const NavBar = () => {
           className="flex items-center gap-3 cursor-pointer group"
         >
           <div className="relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-blue-600 rounded-full blur opacity-40 group-hover:opacity-80 transition duration-300"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-blue-600 rounded-full blur opacity-40 group-hover:opacity-80 transition duration-300" />
             <img
               src={logo}
               alt="Shahid Iqbal"
@@ -70,9 +109,17 @@ const NavBar = () => {
           </div>
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden lg:flex items-center">
-          <ul className="flex items-center space-x-1 text-[15px] font-medium">
+          <ul ref={listRef} className="relative flex items-center text-[15px] font-medium">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute bottom-0.5 h-0.5 rounded-full bg-sky-500 transition-all duration-300 ease-out"
+              style={{
+                left: indicator.left,
+                width: indicator.width,
+                opacity: indicator.opacity,
+              }}
+            />
             {menu}
           </ul>
           <Magnetic strength={24} className="ml-4">
@@ -87,7 +134,6 @@ const NavBar = () => {
           </Magnetic>
         </div>
 
-        {/* Mobile Dropdown */}
         <div className="dropdown lg:hidden">
           <div tabIndex={0} role="button" className="btn btn-ghost text-slate-600 hover:bg-sky-50">
             <svg
@@ -109,7 +155,25 @@ const NavBar = () => {
             tabIndex={0}
             className="menu menu-lg dropdown-content rounded-xl z-10 mt-3 w-56 p-3 shadow-2xl font-medium bg-white border border-slate-100 text-slate-600 space-y-1"
           >
-            {menu}
+            {navItems.map((item) => (
+              <li key={item.id} onMouseDown={(e) => e.preventDefault()}>
+                <Link
+                  to={item.url}
+                  smooth={true}
+                  duration={800}
+                  spy={true}
+                  offset={-120}
+                  onSetActive={() => setActiveUrl(item.url)}
+                  className={`px-4 py-2 cursor-pointer rounded-md transition-colors duration-300 ${
+                    activeUrl === item.url
+                      ? "text-sky-600 font-semibold bg-sky-50"
+                      : "hover:text-sky-600 hover:bg-sky-50"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
             <li>
               <Link
                 to="contact"
