@@ -102,15 +102,33 @@ const projectData = [
   },
 ];
 
+const categories = [
+  { id: "all", name: "All Projects" },
+  { id: "api", name: "Multi-Supplier APIs" },
+  { id: "backend", name: "PHP & Laravel" },
+  { id: "payments", name: "Payment Gateways" },
+  { id: "rail", name: "Rail Systems" },
+];
+
 const Portfolio = () => {
   const [selected, setSelected] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const filteredProjects = projectData.filter((project) => {
+    if (activeCategory === "all") return true;
+    if (activeCategory === "api") return project.category.includes("APIs") || project.category.includes("REST");
+    if (activeCategory === "backend") return project.category.includes("PHP") || project.tags.includes("Laravel");
+    if (activeCategory === "payments") return project.category.includes("PAYMENTS") || project.tags.includes("Xmoney");
+    if (activeCategory === "rail") return project.category.includes("RAIL") || project.tags.includes("Rail APIs");
+    return true;
+  });
 
   return (
     <div
       className="content py-16 md:py-24 bg-sky-50 text-slate-700"
       id="portfolio"
     >
-      <Reveal className="mb-12 xl:mb-16 text-center max-w-2xl mx-auto px-4">
+      <Reveal className="mb-8 text-center max-w-2xl mx-auto px-4">
         <p className="text-sm font-bold uppercase tracking-widest text-sky-600 mb-2">
           Portfolio &amp; Work
         </p>
@@ -121,9 +139,27 @@ const Portfolio = () => {
           A showcase of production travel API integrations, multi-supplier backend engines, payment gateways, and mobile APIs I've engineered.
         </p>
       </Reveal>
+
+      {/* Category Filter Tabs */}
+      <div className="flex flex-wrap justify-center gap-2 mb-10 px-4">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.id)}
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer ${
+              activeCategory === cat.id
+                ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md shadow-sky-300/40 scale-105"
+                : "bg-white text-slate-600 hover:text-sky-600 border border-slate-200 hover:border-sky-300 shadow-sm"
+            }`}
+          >
+            {cat.name}
+          </button>
+        ))}
+      </div>
+
       <div className="mx-auto flex justify-center px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
-          {projectData.map((data, index) => (
+          {filteredProjects.map((data, index) => (
             <Reveal key={data.id} delay={(index % 3) * 100}>
               <Projects data={data} onOpen={setSelected} />
             </Reveal>

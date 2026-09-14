@@ -4,6 +4,7 @@ import Loading from "../components/common/loading/Loading";
 
 const Home = lazy(() => import("../pages/Home"));
 const Main = lazy(() => import("../layouts/Main"));
+const NotFound = lazy(() => import("../pages/NotFound"));
 
 const repoName = import.meta.env.BASE_URL ?? "/";
 
@@ -18,7 +19,7 @@ export const router = createBrowserRouter(
       ),
       children: [
         { path: "", element: <Home /> },
-        { path: "*", element: <Home /> },
+        { path: "*", element: <NotFound /> },
       ],
     },
   ],

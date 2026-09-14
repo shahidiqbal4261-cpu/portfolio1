@@ -1,6 +1,8 @@
 import Roles from "./Roles";
 import Reveal from "../common/reveal/Reveal";
 import Magnetic from "../common/magnetic/Magnetic";
+import ApiTerminalPlayground from "../common/terminal/ApiTerminalPlayground";
+import GlobalApiGlobe from "../common/globe/GlobalApiGlobe";
 
 const rolesData = [
   {
@@ -58,6 +60,19 @@ const Profession = () => {
             </p>
           </div>
 
+          {/* Interactive Skill Badges with Neon Pulse */}
+          <div className="flex flex-wrap gap-2 mt-6">
+            {["PHP / Laravel", "React.js / Vue", "Hotelbeds API", "Duffel Flight API", "Xmoney Payments", "REST & Webhooks"].map((tech, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold text-sky-700 bg-sky-50/80 border border-sky-200/80 shadow-sm backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 hover:bg-sky-500 hover:text-white hover:border-sky-400 hover:shadow-md hover:shadow-sky-400/30 cursor-pointer group"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-500 group-hover:bg-white animate-pulse" />
+                {tech}
+              </span>
+            ))}
+          </div>
+
           <Magnetic className="mt-10 w-fit max-md:mx-auto">
             <a
               href="#contact"
@@ -68,14 +83,35 @@ const Profession = () => {
           </Magnetic>
         </Reveal>
 
-        {/* Right Section */}
-        <div className="space-y-4">
-          {rolesData.map((role, index) => (
-            <Reveal key={role.id} direction="right" delay={index * 80}>
-              <Roles role={role} />
-            </Reveal>
-          ))}
+        {/* Right Section - Roles + 3D Matrix Globe */}
+        <div className="space-y-4 flex flex-col justify-between">
+          <div className="space-y-4">
+            {rolesData.map((role, index) => (
+              <Reveal key={role.id} direction="right" delay={index * 80}>
+                <Roles role={role} />
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={300} className="pt-4">
+            <GlobalApiGlobe />
+          </Reveal>
         </div>
+      </div>
+
+      {/* 2026 Live API Request Terminal Sandbox */}
+      <div className="mt-16 px-4 md:px-8">
+        <Reveal delay={200}>
+          <div className="text-center mb-6">
+            <span className="px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold uppercase tracking-wider">
+              Developer Playground
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+              Live Interactive <span className="text-gradient">API Request Sandbox</span>
+            </h3>
+          </div>
+          <ApiTerminalPlayground />
+        </Reveal>
       </div>
     </section>
   );

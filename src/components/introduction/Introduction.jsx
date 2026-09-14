@@ -1,11 +1,13 @@
-import person from "../../assets/images/person.png";
-import InformationSummary from "./InformationSummary"; // Ensure this component exists
-import Tilt3D from "../common/tilt/Tilt3D";
+import { useState } from "react";
+import Hero3DImage from "../common/tilt/Hero3DImage";
+import InformationSummary from "./InformationSummary";
 import Reveal from "../common/reveal/Reveal";
 import Magnetic from "../common/magnetic/Magnetic";
 import TypewriterRoles from "../common/typewriter/TypewriterRoles";
+import AiStatusPulse from "../common/ai/AiStatusPulse";
+import ResumeModal from "../common/resume/ResumeModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandPointLeft, faHandPointDown } from "@fortawesome/free-solid-svg-icons";
+import { faHandPointLeft, faHandPointDown, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const roleTitles = [
   "Full-Stack Developer",
@@ -33,36 +35,30 @@ const informationSummaryData = [
 ];
 
 const Introduction = () => {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
   return (
     <div
       className="relative flex max-lg:flex-col lg:flex-row-reverse justify-between items-center py-16 lg:py-24 px-4 sm:px-8 xl:px-16 gap-12 overflow-hidden"
       id="introduction"
     >
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+
       {/* Floating 3D orbs (decorative depth layer) */}
       <div className="orb-3d orb-3d-a w-72 h-72 -top-10 right-10 bg-sky-300/40"></div>
       <div className="orb-3d orb-3d-b w-64 h-64 bottom-0 left-0 bg-blue-200/40"></div>
 
-      {/* Right Column (Image Container) */}
+      {/* Right Column (3D Interactive Image Showcase) */}
       <div className="relative w-full lg:w-5/12 max-w-md mx-auto animate-float">
-        <Tilt3D max={8} className="aspect-[4/5] rounded-3xl">
-          <div className="w-full h-full p-1.5 rounded-3xl bg-gradient-to-tr from-sky-400 via-sky-500 to-blue-600 shadow-2xl shadow-sky-300/40">
-            <div className="w-full h-full bg-white rounded-[22px] overflow-hidden p-2">
-              <img
-                className="w-full h-full object-cover rounded-xl"
-                src={person}
-                alt="Shahid Iqbal"
-              />
-            </div>
-          </div>
-        </Tilt3D>
+        <Hero3DImage />
 
-        {/* Pointing hand — desktop: gestures left toward the intro text */}
-        <div className="hidden lg:flex absolute top-1/2 -left-8 xl:-left-12 -translate-y-1/2 z-20 w-14 h-14 items-center justify-center rounded-full bg-white shadow-xl shadow-sky-300/40 border border-sky-100 animate-point-x">
+        {/* Pointing hand — desktop */}
+        <div className="hidden lg:flex absolute top-1/2 -left-8 xl:-left-12 -translate-y-1/2 z-50 w-14 h-14 items-center justify-center rounded-full bg-white shadow-xl shadow-sky-300/40 border border-sky-100 animate-point-x">
           <FontAwesomeIcon icon={faHandPointLeft} className="text-2xl text-sky-500" />
         </div>
 
-        {/* Pointing hand — mobile: gestures down toward the intro text below */}
-        <div className="flex lg:hidden absolute -bottom-7 left-1/2 -translate-x-1/2 z-20 w-14 h-14 items-center justify-center rounded-full bg-white shadow-xl shadow-sky-300/40 border border-sky-100 animate-point-y">
+        {/* Pointing hand — mobile */}
+        <div className="flex lg:hidden absolute -bottom-7 left-1/2 -translate-x-1/2 z-50 w-14 h-14 items-center justify-center rounded-full bg-white shadow-xl shadow-sky-300/40 border border-sky-100 animate-point-y">
           <FontAwesomeIcon icon={faHandPointDown} className="text-2xl text-sky-500" />
         </div>
       </div>
@@ -71,10 +67,9 @@ const Introduction = () => {
       <div className="w-full lg:w-6/12 flex flex-col justify-center max-lg:text-center">
         <Reveal className="max-w-xl mx-auto lg:mx-0">
 
-          {/* Status badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-sky-200 text-sky-700 text-sm font-medium mb-4 shadow-sm shadow-sky-100">
-            <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-            Available for Senior &amp; Integration Engineering Roles
+          {/* 2026 AI Status Pulse */}
+          <div className="mb-4">
+            <AiStatusPulse />
           </div>
 
           <p className="text-lg sm:text-xl font-medium text-slate-500 mb-1">
@@ -119,12 +114,12 @@ const Introduction = () => {
               </a>
             </Magnetic>
             <Magnetic>
-              <a
-                className="inline-block px-6 py-3.5 rounded-xl font-semibold text-slate-600 bg-white border border-slate-200 hover:border-sky-300 hover:text-sky-600 shadow-sm transition duration-300"
-                href="#portfolio"
+              <button
+                onClick={() => setIsResumeOpen(true)}
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-slate-700 bg-white border border-slate-200 hover:border-sky-400 hover:text-sky-600 shadow-sm transition duration-300 cursor-pointer"
               >
-                View Projects ↓
-              </a>
+                <FontAwesomeIcon icon={faEye} className="text-sky-500" /> Preview Resume
+              </button>
             </Magnetic>
           </div>
         </Reveal>

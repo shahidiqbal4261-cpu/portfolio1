@@ -8,7 +8,7 @@ const navItems = [
   { id: 2, name: "About", url: "profile" },
   { id: 3, name: "Process", url: "work-process" },
   { id: 4, name: "Portfolio", url: "portfolio" },
-  { id: 5, name: "Services", url: "services" },
+  { id: 5, name: "Services", url: "profession" },
 ];
 
 const NavBar = () => {

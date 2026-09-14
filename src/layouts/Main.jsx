@@ -4,19 +4,25 @@ import NavBar from "../components/common/navbar/NavBar";
 import Footer from "../components/common/footer/Footer";
 import ScrollToTop from "../components/common/scrollToTop/ScrollToTop";
 import ScrollProgress from "../components/common/scrollProgress/ScrollProgress";
+import CustomCursor from "../components/common/cursor/CustomCursor";
 import Loading from "../components/common/loading/Loading";
 
 const Main = () => {
   return (
     <div data-theme={"light"} className="relative">
+      <CustomCursor />
       <ScrollProgress />
-      <NavBar />
-      <Suspense fallback={<Loading />}>
-        <Outlet />
-      </Suspense>
-      <div className="bg-white">
+      <header role="banner">
+        <NavBar />
+      </header>
+      <main id="main-content" role="main">
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
+      </main>
+      <footer role="contentinfo" className="bg-white">
         <Footer />
-      </div>
+      </footer>
       <ScrollToTop />
     </div>
   );

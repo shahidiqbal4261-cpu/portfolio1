@@ -47,7 +47,7 @@ const Contact = () => {
               </h2>
 
               <p className="text-base sm:text-lg max-lg:text-center font-normal text-slate-600 leading-relaxed mb-8">
-                I'm available for senior backend roles, freelance API integrations, and contract software development. Drop a message to start a conversation!
+                I'm available for senior backend roles, freelance API integrations, and contract software development. Drop a message or contact me directly!
               </p>
             </div>
 

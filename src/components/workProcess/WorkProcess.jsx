@@ -2,6 +2,7 @@ import { useRef } from "react";
 import WorkSteps from "./WorkSteps";
 import Reveal from "../common/reveal/Reveal";
 import ProcessPath from "./ProcessPath";
+import ApiArchitectureFlow from "../common/flow/ApiArchitectureFlow";
 import { faProjectDiagram, faCode, faBug, faRocket } from "@fortawesome/free-solid-svg-icons";
 
 const workStepData = [
@@ -74,6 +75,13 @@ const WorkProcess = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* 2026 Interactive API Architecture Flowchart */}
+      <div className="mt-16">
+        <Reveal delay={200}>
+          <ApiArchitectureFlow />
+        </Reveal>
       </div>
     </section>
   );
