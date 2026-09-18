@@ -18,12 +18,24 @@ const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const listRef = useRef(null);
   const linkRefs = useRef({});
-  const mobileMenuRef = useRef(null);
+  const headerRef = useRef(null);
+  const [headerHeight, setHeaderHeight] = useState(72);
 
   useEffect(() => {
     const handleScroll = () => setPosition(window.scrollY);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const measure = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.getBoundingClientRect().height);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   useEffect(() => {
@@ -33,19 +45,11 @@ const NavBar = () => {
       if (e.key === "Escape") setMobileOpen(false);
     };
 
-    const onPointerDown = (e) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
-        setMobileOpen(false);
-      }
-    };
-
     document.addEventListener("keydown", onKeyDown);
-    document.addEventListener("pointerdown", onPointerDown);
     document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("pointerdown", onPointerDown);
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
@@ -81,170 +85,182 @@ const NavBar = () => {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <div
-      className={`sticky top-0 ${
-        position > 50 || mobileOpen
-          ? "bg-white/95 backdrop-blur-xl border-b border-slate-100 shadow-lg shadow-sky-100/40"
-          : "bg-white/80 backdrop-blur-md border-b border-transparent"
-      } z-50 transition-all duration-300`}
-    >
-      <div
-        ref={mobileMenuRef}
-        className="relative flex justify-between items-center mx-auto content px-4 lg:px-10 py-3 gap-3"
+    <>
+      <header
+        ref={headerRef}
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          position > 50 || mobileOpen
+            ? "bg-white/95 backdrop-blur-xl border-b border-slate-100 shadow-lg shadow-sky-100/40"
+            : "bg-white/80 backdrop-blur-md border-b border-transparent"
+        }`}
       >
-        <Link
-          to="introduction"
-          smooth={true}
-          duration={800}
-          offset={-80}
-          onClick={closeMobile}
-          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group min-w-0 flex-1"
-        >
-          <div className="relative shrink-0">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-blue-600 rounded-full blur opacity-40 group-hover:opacity-80 transition duration-300" />
-            <img
-              src={logo}
-              alt="Shahid Iqbal"
-              className="relative h-10 w-10 sm:h-11 sm:w-11 rounded-full border-2 border-white shadow-md object-cover"
-            />
-          </div>
-          <div className="flex flex-col min-w-0">
-            <p className="text-lg sm:text-2xl font-bold tracking-wide text-slate-900 group-hover:text-sky-600 transition-colors duration-300 truncate">
-              Shahid Iqbal
-            </p>
-            <span className="hidden xs:block text-[10px] sm:text-[11px] text-sky-600 font-medium tracking-wider uppercase -mt-0.5 truncate">
-              Full Stack &amp; API Integrations
-            </span>
-          </div>
-        </Link>
+        <div className="flex justify-between items-center mx-auto max-w-[1320px] w-full px-4 lg:px-10 py-3 gap-3">
+          <Link
+            to="introduction"
+            smooth={true}
+            duration={800}
+            offset={-80}
+            onClick={closeMobile}
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group min-w-0 flex-1"
+          >
+            <div className="relative shrink-0">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-blue-600 rounded-full blur opacity-40 group-hover:opacity-80 transition duration-300" />
+              <img
+                src={logo}
+                alt="Shahid Iqbal"
+                className="relative h-10 w-10 sm:h-11 sm:w-11 rounded-full border-2 border-white shadow-md object-cover"
+              />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <p className="text-lg sm:text-2xl font-bold tracking-wide text-slate-900 group-hover:text-sky-600 transition-colors duration-300 truncate">
+                Shahid Iqbal
+              </p>
+              <span className="hidden min-[380px]:block text-[10px] sm:text-[11px] text-sky-600 font-medium tracking-wider uppercase -mt-0.5 truncate">
+                Full Stack &amp; API Integrations
+              </span>
+            </div>
+          </Link>
 
-        {/* Desktop */}
-        <div className="hidden lg:flex items-center shrink-0">
-          <ul ref={listRef} className="relative flex items-center text-[15px] font-medium">
-            <span
-              aria-hidden
-              className="pointer-events-none absolute bottom-0.5 h-0.5 rounded-full bg-sky-500 transition-all duration-300 ease-out"
-              style={{
-                left: indicator.left,
-                width: indicator.width,
-                opacity: indicator.opacity,
-              }}
-            />
-            {navItems.map((item) => (
-              <li key={item.id} className="relative">
-                <Link
-                  to={item.url}
-                  smooth={true}
-                  duration={800}
-                  spy={true}
-                  offset={-120}
-                  onSetActive={() => setActiveUrl(item.url)}
-                  className={`relative z-10 block px-4 py-2 mx-0.5 cursor-pointer transition-colors duration-300 rounded-md ${
-                    activeUrl === item.url
-                      ? "text-sky-600 font-semibold"
-                      : "text-slate-600 hover:text-sky-600"
-                  }`}
-                >
-                  <span
-                    ref={(el) => {
-                      linkRefs.current[item.url] = el;
-                    }}
-                    className="inline-block"
+          {/* Desktop */}
+          <nav className="hidden lg:flex items-center shrink-0">
+            <ul ref={listRef} className="relative flex items-center text-[15px] font-medium">
+              <span
+                aria-hidden
+                className="pointer-events-none absolute bottom-0.5 h-0.5 rounded-full bg-sky-500 transition-all duration-300 ease-out"
+                style={{
+                  left: indicator.left,
+                  width: indicator.width,
+                  opacity: indicator.opacity,
+                }}
+              />
+              {navItems.map((item) => (
+                <li key={item.id} className="relative">
+                  <Link
+                    to={item.url}
+                    smooth={true}
+                    duration={800}
+                    spy={true}
+                    offset={-120}
+                    onSetActive={() => setActiveUrl(item.url)}
+                    className={`relative z-10 block px-4 py-2 mx-0.5 cursor-pointer transition-colors duration-300 rounded-md ${
+                      activeUrl === item.url
+                        ? "text-sky-600 font-semibold"
+                        : "text-slate-600 hover:text-sky-600"
+                    }`}
                   >
-                    {item.name}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Magnetic strength={24} className="ml-4">
-            <Link
-              to="contact"
-              smooth={true}
-              duration={800}
-              offset={-80}
-              className="block px-5 py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 shadow-lg shadow-sky-300/30 hover:shadow-sky-400/40 hover:scale-[1.03] transition-all duration-300 cursor-pointer"
-            >
-              Contact Me
-            </Link>
-          </Magnetic>
-        </div>
-
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-nav-menu"
-          onClick={() => setMobileOpen((open) => !open)}
-          className="lg:hidden shrink-0 inline-flex items-center justify-center h-11 w-11 rounded-xl text-slate-700 bg-sky-50 border border-sky-100 hover:bg-sky-100 transition-colors cursor-pointer"
-        >
-          {mobileOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
-
-        {/* Mobile panel */}
-        <div
-          id="mobile-nav-menu"
-          className={`lg:hidden absolute left-4 right-4 top-full mt-2 rounded-2xl bg-white border border-slate-100 shadow-xl shadow-sky-100/50 overflow-hidden transition-all duration-200 origin-top z-[60] ${
-            mobileOpen
-              ? "opacity-100 scale-100 visible pointer-events-auto"
-              : "opacity-0 scale-95 invisible pointer-events-none"
-          }`}
-        >
-          <ul className="flex flex-col p-2">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <Link
-                  to={item.url}
-                  smooth={true}
-                  duration={800}
-                  spy={true}
-                  offset={-100}
-                  onSetActive={() => setActiveUrl(item.url)}
-                  onClick={closeMobile}
-                  className={`block w-full px-4 py-3 rounded-xl text-base font-medium cursor-pointer transition-colors ${
-                    activeUrl === item.url
-                      ? "text-sky-600 bg-sky-50 font-semibold"
-                      : "text-slate-700 hover:text-sky-600 hover:bg-sky-50"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-            <li className="pt-1 pb-1 px-1">
+                    <span
+                      ref={(el) => {
+                        linkRefs.current[item.url] = el;
+                      }}
+                      className="inline-block"
+                    >
+                      {item.name}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Magnetic strength={24} className="ml-4">
               <Link
                 to="contact"
                 smooth={true}
                 duration={800}
                 offset={-80}
-                onClick={closeMobile}
-                className="block w-full text-center px-4 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-sky-500 to-blue-600 shadow-md shadow-sky-300/30 cursor-pointer"
+                className="block px-5 py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 shadow-lg shadow-sky-300/30 hover:shadow-sky-400/40 hover:scale-[1.03] transition-all duration-300 cursor-pointer"
               >
                 Contact Me
               </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+            </Magnetic>
+          </nav>
 
-      {/* Dim backdrop on mobile when open */}
+          {/* Mobile toggle */}
+          <button
+            type="button"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-menu"
+            onClick={() => setMobileOpen((open) => !open)}
+            className="lg:hidden shrink-0 inline-flex items-center justify-center h-11 w-11 rounded-xl text-slate-700 bg-sky-50 border border-sky-100 hover:bg-sky-100 transition-colors cursor-pointer"
+          >
+            {mobileOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile menu — fixed & contained within screen bounds */}
       {mobileOpen && (
-        <div
-          aria-hidden
-          className="lg:hidden fixed inset-0 top-[68px] bg-slate-900/20 backdrop-blur-[1px] z-40"
-          onClick={closeMobile}
-        />
+        <div className="lg:hidden fixed inset-0 z-[9999] overflow-hidden select-none" role="dialog" aria-modal="true">
+          {/* Backdrop overlay */}
+          <div
+            className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity duration-300"
+            onClick={closeMobile}
+          />
+
+          {/* Floating Mobile Navigation Card */}
+          <nav
+            id="mobile-nav-menu"
+            className="absolute left-4 right-4 max-w-md mx-auto rounded-2xl bg-white border border-sky-100 shadow-2xl shadow-sky-900/20 p-3 z-10 animate-[fadeInUp_0.2s_ease-out]"
+            style={{ top: headerHeight + 8 }}
+          >
+            <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 mb-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-600">
+                Navigation Menu
+              </span>
+              <button
+                type="button"
+                onClick={closeMobile}
+                className="w-7 h-7 rounded-lg bg-sky-50 text-slate-500 hover:text-sky-600 flex items-center justify-center text-xs font-bold cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <ul className="flex flex-col space-y-1">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    to={item.url}
+                    smooth={true}
+                    duration={800}
+                    spy={true}
+                    offset={-100}
+                    onSetActive={() => setActiveUrl(item.url)}
+                    onClick={closeMobile}
+                    className={`block w-full px-4 py-3 rounded-xl text-base font-semibold cursor-pointer transition-colors ${
+                      activeUrl === item.url
+                        ? "text-sky-600 bg-sky-50 font-bold"
+                        : "text-slate-700 hover:text-sky-600 hover:bg-sky-50/50"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2">
+                <Link
+                  to="contact"
+                  smooth={true}
+                  duration={800}
+                  offset={-80}
+                  onClick={closeMobile}
+                  className="block w-full text-center px-4 py-3.5 rounded-xl text-white font-bold bg-gradient-to-r from-sky-500 via-sky-600 to-blue-700 shadow-md shadow-sky-300/30 cursor-pointer"
+                >
+                  Contact Me
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
